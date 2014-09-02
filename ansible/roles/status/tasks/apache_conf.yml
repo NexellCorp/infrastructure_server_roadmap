@@ -1,0 +1,11 @@
+-   name: apache-website-conf
+    template: src=apache_website.conf dest=/etc/apache2/sites-available/{{ site_name }} owner=root group=root mode=0644
+    tags:
+        - apache-conf
+    notify: reload-apache
+
+-   name: apache-website-enable
+    command: a2ensite {{ site_name }} creates=/etc/apache2/sites-enabled/{{ site_name }}
+    notify: reload-apache
+    tags:
+        - apache-enable

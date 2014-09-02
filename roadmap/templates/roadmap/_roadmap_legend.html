@@ -1,0 +1,29 @@
+  <div class="left">
+    <h2>Statuses</h2>
+      <div style="display: block; margin-bottom: 10px;">
+        <div class="legend-item"><div class="timeline-event-content">Drafting</div><div class="timeline-event timeline-event-dot drafting" style="position: absolute;"></div></div>
+        <div class="legend-item"><div class="timeline-event-content">Approved</div><div class="timeline-event timeline-event-dot approved" style="position: absolute;"></div></div>
+        <div class="legend-item"><div class="timeline-event-content">Scheduled</div><div class="timeline-event timeline-event-dot scheduled" style="position: absolute;"></div></div>
+        <div class="legend-item"><div class="timeline-event-content">Development</div><div class="timeline-event timeline-event-dot development" style="position: absolute;"></div></div>
+        <div class="legend-item"><div class="timeline-event-content">Closing review</div><div class="timeline-event timeline-event-dot closing-review" style="position: absolute;"></div></div>
+        <div class="legend-item"><div class="timeline-event-content">Closed</div><div class="timeline-event timeline-event-dot closed" style="position: absolute;"></div></div>
+      </div>
+      <div style="display: block;">
+        <div class="legend-item"><div class="timeline-event timeline-event-range drafting"><div class="legend-content">Drafting</div></div></div>
+        <div class="legend-item"><div class="timeline-event timeline-event-range approved"><div class="legend-content">Approved</div></div></div>
+        <div class="legend-item"><div class="timeline-event timeline-event-range scheduled"><div class="legend-content">Scheduled</div></div></div>
+        <div class="legend-item"><div class="timeline-event timeline-event-range development"><div class="legend-content">Development</div></div></div>
+        <div class="legend-item"><div class="timeline-event timeline-event-range upstream-development"><div class="legend-content">Upstream development</div></div></div>
+        <div class="legend-item"><div class="timeline-event timeline-event-range closing-review"><div class="legend-content">Closing review</div></div></div>
+        <div class="legend-item"><div class="timeline-event timeline-event-range closed"><div class="legend-content">Closed</div></div></div>
+      </div>
+  </div>
+
+  <div class="right">
+    <h2>Symbols</h2>
+    <div class="legend-item"><img title="ARMv7-A" src="{{ STATIC_URL }}img/32bit.png"/> ARMv7-A</div>
+    <div class="legend-item"><img title="ARMv8-A" src="{{ STATIC_URL }}img/64bit.png"/> ARMv8-A</div>
+    <div style="float:right; text-decoration:underline; color:#33f; cursor:pointer; padding: 5px;" id="close-sidebar">open/close sidebar</div>
+    <div style="float:right; text-decoration:underline; color:#33f; cursor:pointer; padding: 5px;" id="print-timeline">print timeline</div>  
+  </div>
+

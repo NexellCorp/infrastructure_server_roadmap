@@ -1,0 +1,7 @@
+-   include: clone_code.yml
+-   include: local_settings.yml
+-   include: install_roadmap.yml
+-   include: wsgi.yml
+-   include: ssl-certificates.yml
+-   include: apache_conf.yml
+-   include: cronjobs.yml

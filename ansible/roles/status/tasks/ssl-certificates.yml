@@ -1,0 +1,9 @@
+# Copy SSL certificates in the default location. Location is hardcoded also in
+# the apache config template. The list of certificates to copy must be defined
+# in the local secrets.yml file. Refer to the README.
+
+-   name: apache-ssl-certs
+    copy: src={{ item }} dest=/etc/ssl/certs/ owner=root group=root mode=0444
+    with_items: openssl_certs
+    tags:
+        - ssl-certs

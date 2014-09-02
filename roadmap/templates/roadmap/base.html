@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.5 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/variant-multi.css" title="Variant Multi" media="all" />
+    {% block css_include %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/timeline.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/roadmap.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery-ui.css">
+    {% endblock %}
+
+    {% block js_include %}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/timeline.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/redirect_warning.js"></script>
+    {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+<div id="containerfull">
+    <div id="top-bar">
+        {% block tools %}
+        <div style="float:right;">
+            {% include "_logout.html" %}
+        </div>
+        <a href="/"> Home </a>
+        {% endblock %}
+        <div class="clear">&nbsp;</div>
+    </div>
+    <div id="header">
+        <h1>{% block headertitle %}{% endblock %}</h1>
+        {% block header %}{% endblock %}
+    </div>
+    <div id="feature">
+        {% block feature %}{% endblock %}
+        <div class="clear">&nbsp;</div>
+    </div>
+    <div id="main">
+        <div id="sidebar" class="nosidebar">
+            {% block sidebar %}{% endblock %}
+        </div>
+        <div id="content" class="fullcontent">
+            {% block main_content %}{% endblock %}
+        </div>
+        <div class="clear">&nbsp;</div>
+    </div>
+    {% include "roadmap/_redirect_warning.html" %}
+    <div id="footer">
+        <div id="footersections">
+            {% block footer %}{% endblock %}
+            <div class="clear">&nbsp;</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

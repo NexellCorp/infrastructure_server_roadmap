@@ -1,0 +1,21 @@
+{% extends 'roadmap/base.html' %}
+
+{% block title %}Linaro Roadmap{% endblock %}
+
+{% block headertitle %}Linaro Roadmap{% endblock %}
+
+{% block main_content %}
+
+  <div style="margin: 10px;">
+  <table class="roadmaptable" width="100%">
+  {% for component in components %}
+    <tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+      <td><a href="/component/{{ component.pk }}/roadmap">{{ component.name }}</a></td>
+    </tr>
+  {% endfor %}
+  </table>
+  </div>
+
+{% include "roadmap/help.html" %}
+
+{% endblock %}

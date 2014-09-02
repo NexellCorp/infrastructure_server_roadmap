@@ -1,0 +1,10 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<div class="login_logut">
+{% if request.user.username %}
+    <div class="welcome">{% trans "Welcome," %} <b>{{ request.user.username }}!</b></div>
+    <div class="logout"><a href="/logout/">{% trans "Logout" %}</a></div>
+{% else %}
+    <div class="login"><a href="/accounts/login/">{% trans Login %}</a></div>
+{% endif %}
+</div>

@@ -1,0 +1,3 @@
+# Common tasks for all instances (production and staging).
+- include: install_deps.yml
+- include: apache.yml

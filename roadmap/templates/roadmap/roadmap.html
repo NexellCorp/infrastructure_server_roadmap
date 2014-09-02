@@ -1,0 +1,342 @@
+{% extends 'roadmap/base.html' %}
+
+{% block title %}
+{{ current.name }} Roadmap
+{% endblock %}
+
+{% block headertitle %}
+{{ current.name }} Roadmap
+{% endblock %}
+
+{% block feature %}
+{% include "roadmap/_roadmap_legend.html" %}
+{% endblock %}
+
+{% block js_include %}
+{{ block.super }}
+<script type="text/javascript">
+    google.load("visualization", "1");
+
+    // Set callback to run when API is loaded
+    google.setOnLoadCallback(drawVisualization);
+    var zoomin = 10*2629740000;
+    var startDate = new Date({{ roadmap_start.year }}, {{ roadmap_start.month }}, {{ roadmap_start.day }});
+    var endDate = new Date({{ roadmap_end.year }}, {{ roadmap_end.month }}, {{ roadmap_end.day }});
+    {% if epics %}
+        {% for epic in epics %}
+            {% if epic.is_valid_swimlane %}
+                var vis{{ forloop.counter0 }};
+                function createTimeline{{ forloop.counter0 }}() {
+                    var data = [];
+                    options = {
+                        "width":  "100%",
+                        "height": "auto",
+                        "minHeight": "80",
+                        "style": "dot", // optional
+                        {% if forloop.first %}
+                            "axisOnTop": true,
+                        {% endif %}
+                        "animate": false,
+                        "animateZoom": false,
+                        {% if not forloop.first and not forloop.last %}
+                            "showMajorLabels": false,
+                            "showMinorLabels" : false,
+                        {% endif %}
+                        "zoomMin": zoomin,
+                        "min": startDate,
+                        "max": endDate,
+                        "selectable": false
+                    };
+                    {% if forloop.last and other_cards %}
+                        options["showMajorLabels"] = false;
+                        options["showMinorLabels"] = false;
+                    {% endif %}
+
+                    // Instantiate our timeline object.
+                    vis{{ forloop.counter0 }} = new links.Timeline(document.getElementById('{{ epic.key }}'));
+                    {% for card in epic.implementedby.all %}
+                        {% if card.is_valid %}
+                            data.push({
+                                "start": new Date("{{ card.start_date|date:'c' }}"),
+                                {% if card.event_type == 'ONGOING' %}
+                                    {% if card.end_date %}
+                                        "end": new Date("{{ card.end_date|date:'c' }}"),
+                                    {% else %}
+                                        "end": endDate,
+                                    {% endif %}
+                                {% endif %}
+                                "content": "<a class=\"confirm\" href=\"{{ card.url }}\">{{ card.summary }}</a>", 
+                                "editable": false,
+                                "className": "{{ card.style }}",
+                            });
+                        {% endif %}
+                    {% endfor %}
+                    google.visualization.events.addListener(vis{{ forloop.counter0 }}, 'rangechange', onrangechange{{ forloop.counter0 }});
+                    google.visualization.events.addListener(vis{{ forloop.counter0 }}, 'ready', onready{{ forloop.counter0 }});
+
+                    // Draw our timeline with the created data and options
+                    vis{{ forloop.counter0 }}.draw(data, options);
+                }
+
+                function onrangechange{{ forloop.counter0 }}() {
+                    var range = vis{{ forloop.counter0 }}.getVisibleChartRange();
+                    {% for e in epics %}
+                        {% if e.is_valid_swimlane %}
+                            {% if forloop.counter0 != forloop.parentloop.counter0 %}
+                                vis{{ forloop.counter0 }}.setVisibleChartRange(range.start, range.end);
+                            {% endif %}
+                            {% if forloop.last and other_cards %}
+                                vis{{ forloop.counter }}.setVisibleChartRange(range.start, range.end);
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                }
+
+                function onready{{ forloop.counter0 }}() {
+                    $(".confirm").click(function (e) {
+                        e.preventDefault();
+                        var hrefAttribute = $(this).attr("href");
+                        $("#dialog-confirm").dialog('option', 'buttons', {
+                          "OK": function () {
+                            window.location.href = hrefAttribute;
+                          },
+                          "Cancel": function () {
+                            $(this).dialog("close");
+                          }
+                        });
+                        $("#dialog-confirm").dialog("open");
+                    });
+                }
+
+                {% if forloop.last and other_cards %}
+                    var vis{{ forloop.counter }};
+                    function createTimeline{{ forloop.counter }}() {
+                        var data = [];
+                        options = {
+                            "width":  "100%",
+                            "height": "auto",
+                            "minHeight": "80",
+                            "style": "dot", // optional
+                            "animate": false,
+                            "animateZoom": false,
+                            "zoomMin": zoomin,
+                            "min": startDate,
+                            "max": endDate,
+                            "selectable": false
+                        };
+
+                        // Instantiate our timeline object.
+                        vis{{ forloop.counter }} = new links.Timeline(document.getElementById('other-cards'));
+                        {% for card in other_cards %}
+                            {% if card.is_valid %}
+                                data.push({
+                                    "start": new Date("{{ card.start_date|date:'c' }}"),
+                                    {% if card.event_type == 'ONGOING' %}
+                                    "end": endDate,
+                                    {% endif %}
+                                    "content": "<a class=\"confirm\" href=\"{{ card.url }}\">{{ card.summary }}</a>", 
+                                    "editable": false,
+                                    "className": "{{ card.style }}",
+                                });
+                            {% endif %}
+                        {% endfor %}
+                        google.visualization.events.addListener(vis{{ forloop.counter }}, 'rangechange', onrangechange{{ forloop.counter }});
+                        google.visualization.events.addListener(vis{{ forloop.counter }}, 'ready', onready{{ forloop.counter }});
+
+                        // Draw our timeline with the created data and options
+                        vis{{ forloop.counter }}.draw(data, options);
+                    }
+
+                    function onrangechange{{ forloop.counter }}() {
+                        var range = vis{{ forloop.counter }}.getVisibleChartRange();
+                        {% for e in epics %}
+                            {% if e.is_valid_swimlane %}
+                                vis{{ forloop.counter0 }}.setVisibleChartRange(range.start, range.end);
+                            {% endif %}
+                        {% endfor %}
+                    }
+
+                    function onready{{ forloop.counter }}() {
+                        $(".confirm").click(function (e) {
+                            e.preventDefault();
+                            var hrefAttribute = $(this).attr("href");
+                            $("#dialog-confirm").dialog('option', 'buttons', {
+                              "OK": function () {
+                                window.location.href = hrefAttribute;
+                              },
+                              "Cancel": function () {
+                                $(this).dialog("close");
+                              }
+                            });
+                            $("#dialog-confirm").dialog("open");
+                        });
+                    }
+
+                {% endif %}
+            {% endif %}
+        {% endfor %} // endfor epic
+
+        function drawVisualization() {
+            {% for epic in epics %}
+                {% if epic.is_valid_swimlane %}
+                    createTimeline{{ forloop.counter0 }}();
+                    {% if forloop.last and other_cards %}
+                        createTimeline{{ forloop.counter }}();
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% for epic in epics %}
+                {% if epic.is_valid_swimlane %}
+                    onrangechange{{ forloop.counter0 }}();
+                    {% if forloop.last and other_cards %}
+                        onrangechange{{ forloop.counter }}();
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        }
+    {% else %}
+        <!-- No epics, but other cards present -->
+        function drawVisualization() {
+            var data = [];
+            options = {
+                "width":  "100%",
+                "height": "auto",
+                "minHeight": "80",
+                "style": "dot", // optional
+                "axisOnTop": true,
+                "animate": false,
+                "animateZoom": false,
+                "zoomMin": 33*2629740000, // 33* month in miliseconds
+                "min": startDate,
+                "max": endDate,
+                "selectable": false
+            };
+
+            // Instantiate our timeline object.
+            timeline = new links.Timeline(document.getElementById('other-cards'));
+            {% for card in other_cards %}
+                {% if card.is_valid %}
+                    data.push({
+                    "start": new Date("{{ card.start_date|date:'c' }}"),
+                    {% if card.event_type == 'ONGOING' %}
+                        "end": endDate,
+                    {% endif %}
+                    "content": "<a class=\"confirm\" ref=\"{{ card.url }}\">{{ card.summary }}</a>", 
+                    "editable": false,
+                    "className": "{{ card.style }}",
+                    });
+                {% endif %}
+            {% endfor %}
+            google.visualization.events.addListener(timeline, 'ready', onready);
+            timeline.draw(data, options);
+        }
+        function onready() {
+            $(".confirm").click(function (e) {
+                e.preventDefault();
+                var hrefAttribute = $(this).attr("href");
+                $("#dialog-confirm").dialog('option', 'buttons', {
+                  "OK": function () {
+                    window.location.href = hrefAttribute;
+                  },
+                  "Cancel": function () {
+                    $(this).dialog("close");
+                  }
+                });
+                $("#dialog-confirm").dialog("open");
+            });
+        }
+
+    {% endif %}
+   </script>
+   <script type="text/javascript">
+   $(document).ready(function() {
+      $( "#close-sidebar" ).click( function() {
+        $( "#sidebar" ).toggleClass("nosidebar");
+        $( "#content" ).toggleClass("stdcontent");
+        $( "#content" ).toggleClass("fullcontent");
+        drawVisualization();
+      });
+   });
+   </script>
+   <script type="text/javascript" src="{{ STATIC_URL }}js/html2canvas.js"></script>
+   <script type="text/javascript" src="{{ STATIC_URL }}js/FileSaver.js"></script>
+   <script type="text/javascript" src="{{ STATIC_URL }}js/canvas-toBlob.js"></script>
+   <script type="text/javascript">
+   $(document).ready(function() {
+      $( "#print-timeline" ).click( function() { 
+        html2canvas($('#content'), {
+          onrendered: function(canvas) {
+            canvas.toBlob(function(blob) {
+              saveAs(blob, "roadmap.png");
+            });
+          }
+        });
+      });
+   });
+   </script>
+
+{% endblock %}
+
+{% block sidebar %}
+{% if cards %}
+<div class="sidebarbox">
+    <h2>No FixVersion</h2>
+    <ul class="sidemenu">
+    {% for card in cards %}
+        {% if not card.is_valid and not card.fix_version %}
+        <li><a class="confirm" href="{{ card.url }}">{{ card.status.name}} - {{ card.summary }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% if epics %}
+<div class="sidebarbox">
+    <h2>Broken Epics</h2>
+    <ul class="sidemenu">
+    {% for card in epics %}
+        {% if not card.is_valid_swimlane %}
+        <li><a class="confirm" href="{{ card.url }}">{{ card.summary }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block main_content %}
+<div id="tl_container" style="overflow-x: hidden; border-right: solid #444 1px;">
+{% for epic in epics %}
+  {% if epic.is_valid_swimlane %}
+    {% if forloop.counter|divisibleby:2 %}
+      <div style="background-color: #CCC;">
+    {% else %}
+      <div style="background-color: #FFF;">
+    {% endif %}
+      <div style="z-index: 1000; float: left; width: 150px; overflow: hidden;">
+        <a class="confirm" style="white-space:nowrap;" href="{{ epic.url }}">{{ epic.summary }}</a> 
+        {% if epic.is_v7 %} 
+        <br/>
+        <img src="{{ STATIC_URL }}img/32bit.png" title="ARMv7-A"/>
+        {% endif %}
+        {% if epic.is_v8 %}
+        <img src="{{ STATIC_URL }}img/64bit.png" title="ARMv8-A"/>
+        {% endif %}
+      </div>
+      <div style="margin-left:151px" id="{{ epic.key }}"></div>
+    </div>
+  {% endif %}
+{% endfor %}
+{% if other_cards %}
+    <div style="background-color: #ff9999;">
+       <div style="z-index: 1000; float: left; width: 150px; overflow: hidden;">Other</div>
+       <div style="margin-left:151px" id="other-cards"></div>
+    </div>
+{% endif %}
+</div>
+{% endblock %}
+
+{% block tools %}
+{{ block.super }}
+&gt; <a href="/component/{{ current.id }}"> Project ({{ current.name }}) </a> &gt; <a href="/component/{{ current.id }}/roadmap"> Roadmap ({{ current.name }}) </a>
+{% endblock %}

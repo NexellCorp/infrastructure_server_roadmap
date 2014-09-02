@@ -1,0 +1,136 @@
+Step-by-step installation instructions for production environment
+
+1. install dependencies
+apt-get install python-pip
+apt-get install git
+apt-get install apache2 libapache2-mod-wsgi
+apt-get install python-tz
+apt-get install expect
+
+2. install virtualenvwrapper and create virtualenv
+pip install virtualenvwrapper
+export WORKON_HOME=/srv/virtualenv
+source /usr/local/bin/virtualenvwrapper.sh
+mkvirtualenv roadmap
+workon roadmap
+
+3. checkout code
+cd /srv/
+git clone http://staging.git.linaro.org/git-ro/infrastructure/roadmap.git staging_roadmap
+cd staging_roadmap
+
+4. install dependencies
+pip install -r requirements.txt
+
+5. edit local settings
+vim linaroroadmap/local_settings.py
+
+Content of local_settings.py
+CROWD = {
+    'url': 'https://login.linaro.org:8443/crowd/rest',
+    'app_name': '',
+    'password': '',
+    'superuser': False,
+}
+
+TRUSTED_ADDRESS = ['10.101.63.171', '10.137.64.8', '82.22.217.167', '10.191.101.11', '10.165.3.8']
+
+JIRA_PROJECT = "Linaro Roadmap"
+JIRA_STATUSES = ['Closed', 'Resolved', 'In Progress', 'Open', 'Reopened']
+SFID = 10301
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    #'crowd.backends.CrowdBackend',
+)
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '/srv/staging_roadmap/linaroroadmap.db',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    }
+}
+
+STATIC_ROOT = '/var/www/staging.status.linaro.org/static/'
+
+DEBUG=True
+
+5. create database
+./manage syncdb
+./manage migrate
+
+6. copy static files to proper destination
+mkdir /var/www/staging.status.linaro.org
+mkdir /var/www/staging.status.linaro.org/static
+
+./manage collectstatic
+
+7. create index.wsgi (in the same directory as manage.py)
+vim index.wsgi
+Content of index.wsgi
+import os
+import sys
+import site
+
+# Add the site-packages of the chosen virtualenv to work with
+site.addsitedir('/srv/virtualenv/roadmap/local/lib/python2.7/site-packages')
+
+# Add the app's directory to the PYTHONPATH
+sys.path.append('/srv/staging_roadmap/')
+sys.path.append('/srv/staging_roadmap/linaroroadmap/')
+sys.path.append('/srv/staging_roadmap/linaroroadmap/linaroroadmap/')
+sys.path.append('/srv/staging_roadmap/linaroroadmap/linaroroadmap/roadmap/')
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'linaroroadmap.settings'
+
+# Activate your virtual env
+activate_env=os.path.expanduser("/srv/virtualenv/roadmap/bin/activate_this.py")
+execfile(activate_env, dict(__file__=activate_env))
+
+import django.core.handlers.wsgi
+application = django.core.handlers.wsgi.WSGIHandler()
+
+8. make sure apache is able to access database
+chmod www-data:www-data linarorodamap.db
+
+9. create apache configuration
+vim /etc/apache2/sites-available/staging.status.linaro.org
+
+Content of staging.status.linaro.org
+<VirtualHost *:80>
+        ServerAdmin webmaster@linaro.org
+        ServerName staging.status.linaro.org
+
+        #SSLEngine on
+        #SSLCertificateFile /etc/ssl/certs/roadmap.linaro.org.pem
+        #SSLCertificateKeyFile /etc/ssl/certs/roadmap.linaro.org.pem
+        #SSLCACertificateFile /etc/ssl/certs/gd_bundle.crt
+
+        SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        #CustomLog logs/ssl_request_log \
+        #   "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+        #DocumentRoot /var/www/roadmap.linaro.org
+        WSGIScriptAlias / srv/staging_roadmap/index.wsgi
+
+        Alias /static/ /var/www/staging.status.linaro.org/static/
+        <Location "/static/">
+            Options -Indexes
+        </Location>
+</VirtualHost>
+
+10. reload apache
+a2ensite staging.status.linaro.org
+service apache2 reload
+
+11. Additional steps:
+ - create milestones
+The code is buggy, so there won't be any index page if the milestones are absent
+ - configure colors and classes for card states
+otherwise the bars will be black
+ - disable debug
+

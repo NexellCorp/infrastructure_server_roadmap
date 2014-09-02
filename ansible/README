@@ -1,0 +1,47 @@
+Important Notice
+----------------
+
+To run the configuration, it is necessary to:
+ - Rename the file secrets.yml.local in secrets.yml
+ - Update it with with the correct credentials
+
+The secrets.yml file contains variables for:
+ - Crowd user name and password
+ - Jira user name and password
+ - A list of paths to local files necessary for Apache SSL configuration
+
+ Not providing those values will result in the playbook not being applied or
+ in the application not being installed correctly.
+
+ Note: if the playbook is executed without those variables, the values on the
+ server will be lost!! Do not run the playbook if you do not have those values.
+
+ Executing the Ansible Playbook
+ ------------------------------
+ 
+ This is a "special" setup: we have two domains, hosted on the same machine.
+ Since the ansible steps are executed for each domain, we cannot execute them
+ all at the same time.
+
+ It is necessary to first run it for one domain, and then for the other. There
+ can be errors on the package installation, since it needs exclusive lock.
+
+ To execute the playbook, from the ansible folder:
+
+ ansible-playbook -i hosts site.yml -l status.linaro.org
+
+ and then for the other domain, roadmap.linaro.org.
+
+ Performing an Update
+ --------------------
+
+ To perform an update of the code on the server:
+
+ ansible-playbook -i hosts update.yml -l status.linaro.org
+
+ It is possible to pass an extra variables to identify the git checkout or tag
+ to use to update the code:
+
+ ansible-playbook -i hosts update.yml -l status.linaro.org -e git_tag=$TAG
+
+ By default the value of 'git_tag' points to HEAD.

@@ -1,0 +1,35 @@
+# Install roadmap via virtualenv.
+-   name: roadmap-log-directory
+    file: path=/var/log/roadmap state=directory owner={{ apache_user }} group={{ apache_user }}
+
+-   name: create-virtualenv
+    command: virtualenv --system-site-packages {{ install_base }}/virtualenv/{{ install_dir }} creates={{ install_base }}/virtualenv/{{ install_dir }}
+
+-   name: install-requirements
+    pip: virtualenv={{ install_base }}/virtualenv/{{ install_dir }} requirements={{ install_base }}/{{ install_dir }}/requirements.txt state=present
+
+# Roadmap installation steps.
+-   name: roadmap-django-syncdb
+    django_manage: command=syncdb virtualenv={{ install_base }}/virtualenv/{{ install_dir }} app_path={{install_base }}/{{ install_dir }}
+
+-   name: roadmap-django-migrate
+    django_manage: command=migrate virtualenv={{ install_base }}/virtualenv/{{ install_dir }} app_path={{install_base }}/{{ install_dir }}
+
+-   name: roadmap-static-files
+    file: state=directory src={{ install_base }}/{{ install_dir }}/roadmap/static dest=/var/www/{{ install_dir }}/static/
+
+-   name: roadmap-django-collectstatic
+    django_manage: command=collectstatic virtualenv={{ install_base }}/virtualenv/{{ install_dir }} app_path={{install_base }}/{{ install_dir }}
+
+# Make sure everything can be accessed by the Apache user.
+-   name: fix-virtualenv-ownership
+    file: path={{ install_base }}/virtualenv recurse=yes owner={{ apache_user }} group={{ apache_user }}
+
+-   name: fix-roadmap-install-ownership
+    file: path={{ install_base }}/{{ install_dir }} owner={{ apache_user }} group={{ apache_user }} recurse=yes
+
+-   name: fix-roadmap-static-ownership
+    file: path=/var/www/{{ install_dir }} recurse=yes owner={{ apache_user }} group={{ apache_user }}
+
+-   name: fix-roadmap-log-ownership
+    file: path=/var/log/roadmap recurse=yes owner={{ apache_user }} group={{ apache_user }}

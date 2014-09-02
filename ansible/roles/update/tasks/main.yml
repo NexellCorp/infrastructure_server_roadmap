@@ -1,0 +1,35 @@
+# Perform an update of status/roadmap
+-   include: ../../common/handlers/stop-apache.yml
+
+-   name: update-roadmap
+    git: name={{ roadmap_repo }} dest={{ install_base }}/{{ install_dir }} update=yes force=yes version={{ git_tag }}
+
+-   name: fix-repo-owner
+    file: path={{ install_base}}/{{ install_dir }} recurse=yes owner={{ apache_user }} group={{ apache_user }}
+
+-   name: roadmap-django-syncdb
+    django_manage: command=syncdb virtualenv={{ install_base }}/virtualenv/{{ install_dir }} app_path={{install_base }}/{{ install_dir }}
+
+-   name: roadmap-django-migrate
+    django_manage: command=migrate virtualenv={{ install_base }}/virtualenv/{{ install_dir }} app_path={{install_base }}/{{ install_dir }}
+
+-   name: roadmap-static-files
+    file: state=directory src={{ install_base }}/{{ install_dir }}/roadmap/static dest=/var/www/{{ install_dir }}/static/
+
+-   name: roadmap-django-collectstatic
+    django_manage: command=collectstatic virtualenv={{ install_base }}/virtualenv/{{ install_dir }} app_path={{install_base }}/{{ install_dir }}
+
+# Make sure everything can be accessed by the Apache user.
+-   name: fix-virtualenv-ownership
+    file: path={{ install_base }}/virtualenv recurse=yes owner={{ apache_user }} group={{ apache_user }}
+
+-   name: fix-roadmap-install-ownership
+    file: path={{ install_base }}/{{ install_dir }} owner={{ apache_user }} group={{ apache_user }} recurse=yes
+
+-   name: fix-roadmap-static-ownership
+    file: path=/var/www/{{ install_dir }} recurse=yes owner={{ apache_user }} group={{ apache_user }}
+
+-   name: fix-roadmap-log-ownership
+    file: path=/var/log/roadmap recurse=yes owner={{ apache_user }} group={{ apache_user }}
+
+-   include: ../../common/handlers/restart-apache.yml

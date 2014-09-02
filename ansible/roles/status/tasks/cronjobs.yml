@@ -1,0 +1,20 @@
+# Install necessary cronjobs.
+-   name: Copy the jira update script
+    template: src=roadmap_update_cron.sh
+              dest={{ install_base }}/{{ install_dir }}/bin/roadmap_update_cron.sh
+              owner={{ apache_user }}
+              group={{ apache_user }}
+              mode=0750
+    tags:
+        - cronjob
+
+-   name: Setup jira update cronjob
+    cron:   name='Update cards'
+            cron_file=roadmap-cards-update
+            state=present
+            user={{ apache_user }}
+            job={{ install_base }}/{{ install_dir }}/bin/roadmap_update_cron.sh
+            minute=3
+            hour=5,11
+    tags:
+        - cronjob

@@ -1,0 +1,46 @@
+{% extends 'roadmap/base.html' %}
+
+{% block title %}Cards by Status{% endblock %}
+
+{% block headertitle %}Cards by Status{% endblock %}
+
+{% block css_include %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.ui.accordion.css">
+{% endblock %}
+
+{% block js_include %}
+{{ block.super }}
+{% load aggregate %}
+<script type="text/javascript">
+  $(function() {
+    $( "#cardlist" ).accordion({ collapsible: true, active: false });
+  });
+</script>
+{% endblock %}
+
+{% block header %}
+<h2>{{ status.name }}</h2>
+{% endblock %}
+
+{% block main_content %}
+  <div id="cardlist">
+    {% for component in components %}
+    <h3>{{ component.name }} ({% card_aggregate component aggrby=status aggrbyname='status' from=from_milestone to=to_milestone %})</h3>
+    <div>
+    <ul class="status">
+      {% for card in component.card_set.all %}
+        {% if card in roadmap_cards %}
+        <li class="status {{ card.status.status_style.class_name }}"><a class="confirm" href="{{ card.url }}">({{ card.key }}) {{ card.summary }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    </div>
+    {% endfor %}
+  </div>
+
+{% endblock %}
+
+{% block tools %}
+{{ block.super }} &gt; <a href="/status/{{ status.pk }}"> Status ({{ status.name }}) </a>
+{% endblock %}

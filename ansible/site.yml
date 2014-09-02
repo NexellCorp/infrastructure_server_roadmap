@@ -1,0 +1,11 @@
+# Install everything.
+
+-   hosts: all
+    gather_facts: no
+    sudo: yes
+    roles:
+        - common
+        - status
+    vars_files:
+        - secrets.yml
+ 

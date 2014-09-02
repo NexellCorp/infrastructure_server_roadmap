@@ -1,0 +1,6 @@
+# Clone roadmap/status code and fix files and dirs permission.
+-   name: clone-roadmap
+    git: name={{ roadmap_repo }} dest={{ install_base }}/{{ install_dir }} update=no
+
+-   name: fix-repo-owner
+    file: path={{ install_base}}/{{ install_dir }} recurse=yes owner={{ apache_user }} group={{ apache_user }}

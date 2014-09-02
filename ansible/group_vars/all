@@ -1,0 +1,9 @@
+# Common variables.
+install_base: /srv
+roadmap_repo: http://git.linaro.org/git/infrastructure/roadmap.git
+apache_user: www-data
+crowd_url: https://login.linaro.org:8443/crowd/rest/usermanagement/1
+jira_server: https://cards.linaro.org
+jira_sfid: 10301
+# Mostly necessary for updates, it can be overridden on the command line.
+git_tag: HEAD

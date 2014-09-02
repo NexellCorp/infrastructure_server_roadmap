@@ -1,0 +1,19 @@
+# Install all dependencies required by roadmap.
+-   name: install-os-deps
+    apt: name={{ item }}
+    with_items:
+        - apache2
+        - libapache2-mod-wsgi
+        - git
+        - python-pip
+        - python-tz
+        - python-virtualenv
+        - ntp
+
+- name: upgrade pip
+  pip:  name=pip
+        version=1.4
+
+- name: install virtualenvwrapper
+  pip:  name=virtualenvwrapper
+        version=4.0

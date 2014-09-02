@@ -1,0 +1,6 @@
+# Install the correct WSGI script.
+-   name: install-wsgi
+    template: src=roadmap.wsgi dest={{ install_base }}/{{ install_dir }}/{{ wsgi_name }} owner={{ apache_user }} group={{ apache_user }} mode=0744
+    tags:
+        - wsgi
+    notify: restart-apache

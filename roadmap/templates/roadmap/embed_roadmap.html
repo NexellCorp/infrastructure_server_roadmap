@@ -1,0 +1,57 @@
+	<link rel="stylesheet" type="text/css" href="http://ec2-54-227-123-102.compute-1.amazonaws.com/static/css/variant-mini.css" title="Variant Multi" media="all" />
+	<link rel="stylesheet" type="text/css" href="http://ec2-54-227-123-102.compute-1.amazonaws.com/static/css/timeline.css">
+	<link rel="stylesheet" type="text/css" href="http://ec2-54-227-123-102.compute-1.amazonaws.com/static/css/roadmap.css">
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="http://ec2-54-227-123-102.compute-1.amazonaws.com/static/js/timeline.js"></script>
+
+    {% if cards %}
+    <script type="text/javascript">
+      google.load("visualization", "1");
+
+      // Set callback to run when API is loaded
+      google.setOnLoadCallback(drawVisualization_{{ current.id }});
+
+      // Called when the Visualization API is loaded.
+      function drawVisualization_{{ current.id }}() {
+        var data_{{ current.id }} = [];
+        options_{{ current.id }} = {
+          "width":  "100%",
+          "height": "99%",
+          "style": "dot", // optional
+          "min": new Date(2011, 1, 1),
+          "max": new Date(2015, 1, 1)
+        };
+
+        // Instantiate our timeline object.
+        var timeline_{{ current.id }} = new links.Timeline(document.getElementById('timeline-{{ current.id }}'));
+        {% for card in cards %}
+            {% if card.is_valid %}
+            data_{{ current.id }}.push({
+                "start": new Date("{{ card.start_date|date:'c' }}"),
+                {% if card.event_type == 'ONGOING' %}
+                "end": new Date(2015, 1, 1),
+                {% endif %}
+                "content": "<a href=\"{{ card.url }}\">{{ card.summary }}</a>", 
+                "editable": false,
+                "className": "{{ card.style }}",
+            });
+            {% endif %}
+        {% endfor %}
+
+        // Draw our timeline with the created data and options
+        timeline_{{ current.id }}.draw(data_{{ current.id }}, options_{{ current.id }});
+      }
+   </script>
+   {% endif %}
+
+<div id="containerfull">
+	<div id="main">
+                <div id="content">
+<div id="timeline-{{ current.id }}" style="height:700px;"></div>
+
+                </div>
+		<div class="clear">&nbsp;</div>
+	</div>
+
+</div>
+

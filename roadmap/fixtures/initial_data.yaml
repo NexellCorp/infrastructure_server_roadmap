@@ -1,0 +1,204 @@
+- fields: {date: '2011-01-20', is_major: false, name: '2011.01'}
+  model: roadmap.Milestone
+  pk: 1
+- fields: {date: '2011-02-20', is_major: false, name: '2011.02'}
+  model: roadmap.Milestone
+  pk: 2
+- fields: {date: '2011-03-20', is_major: false, name: '2011.03'}
+  model: roadmap.Milestone
+  pk: 3
+- fields: {date: '2011-04-20', is_major: false, name: '2011.04'}
+  model: roadmap.Milestone
+  pk: 4
+- fields: {date: '2011-05-20', is_major: false, name: '2011.05'}
+  model: roadmap.Milestone
+  pk: 5
+- fields: {date: '2011-06-20', is_major: false, name: '2011.06'}
+  model: roadmap.Milestone
+  pk: 6
+- fields: {date: '2011-07-20', is_major: false, name: '2011.07'}
+  model: roadmap.Milestone
+  pk: 7
+- fields: {date: '2011-08-20', is_major: false, name: '2011.08'}
+  model: roadmap.Milestone
+  pk: 8
+- fields: {date: '2011-09-20', is_major: false, name: '2011.09'}
+  model: roadmap.Milestone
+  pk: 9
+- fields: {date: '2011-10-20', is_major: false, name: '2011.10'}
+  model: roadmap.Milestone
+  pk: 10
+- fields: {date: '2011-11-20', is_major: false, name: '2011.11'}
+  model: roadmap.Milestone
+  pk: 11
+- fields: {date: '2011-12-20', is_major: false, name: '2011.12'}
+  model: roadmap.Milestone
+  pk: 12
+- fields: {date: '2012-01-20', is_major: false, name: '2012.01'}
+  model: roadmap.Milestone
+  pk: 13
+- fields: {date: '2012-02-20', is_major: false, name: '2012.02'}
+  model: roadmap.Milestone
+  pk: 14
+- fields: {date: '2012-03-20', is_major: false, name: '2012.03'}
+  model: roadmap.Milestone
+  pk: 15
+- fields: {date: '2012-04-20', is_major: false, name: '2012.04'}
+  model: roadmap.Milestone
+  pk: 16
+- fields: {date: '2012-05-20', is_major: false, name: '2012.05'}
+  model: roadmap.Milestone
+  pk: 17
+- fields: {date: '2012-06-20', is_major: false, name: '2012.06'}
+  model: roadmap.Milestone
+  pk: 18
+- fields: {date: '2012-07-20', is_major: false, name: '2012.07'}
+  model: roadmap.Milestone
+  pk: 19
+- fields: {date: '2012-08-20', is_major: false, name: '2012.08'}
+  model: roadmap.Milestone
+  pk: 20
+- fields: {date: '2012-09-20', is_major: false, name: '2012.09'}
+  model: roadmap.Milestone
+  pk: 21
+- fields: {date: '2012-10-20', is_major: false, name: '2012.10'}
+  model: roadmap.Milestone
+  pk: 22
+- fields: {date: '2012-11-20', is_major: false, name: '2012.11'}
+  model: roadmap.Milestone
+  pk: 23
+- fields: {date: '2012-12-20', is_major: false, name: '2012.12'}
+  model: roadmap.Milestone
+  pk: 24
+- fields: {date: '2013-01-20', is_major: false, name: '2013.01'}
+  model: roadmap.Milestone
+  pk: 25
+- fields: {date: '2013-02-20', is_major: false, name: '2013.02'}
+  model: roadmap.Milestone
+  pk: 26
+- fields: {date: '2013-03-20', is_major: false, name: '2013.03'}
+  model: roadmap.Milestone
+  pk: 27
+- fields: {date: '2013-04-20', is_major: false, name: '2013.04'}
+  model: roadmap.Milestone
+  pk: 28
+- fields: {date: '2013-05-20', is_major: false, name: '2013.05'}
+  model: roadmap.Milestone
+  pk: 29
+- fields: {date: '2013-06-20', is_major: false, name: '2013.06'}
+  model: roadmap.Milestone
+  pk: 30
+- fields: {date: '2013-07-20', is_major: false, name: '2013.07'}
+  model: roadmap.Milestone
+  pk: 31
+- fields: {date: '2013-08-20', is_major: false, name: '2013.08'}
+  model: roadmap.Milestone
+  pk: 32
+- fields: {date: '2013-09-20', is_major: false, name: '2013.09'}
+  model: roadmap.Milestone
+  pk: 33
+- fields: {date: '2013-10-20', is_major: false, name: '2013.10'}
+  model: roadmap.Milestone
+  pk: 34
+- fields: {date: '2013-11-20', is_major: false, name: '2013.11'}
+  model: roadmap.Milestone
+  pk: 35
+- fields: {date: '2013-12-20', is_major: false, name: '2013.12'}
+  model: roadmap.Milestone
+  pk: 36
+- fields: {date: '2014-01-20', is_major: false, name: '2014.01'}
+  model: roadmap.Milestone
+  pk: 37
+- fields: {date: '2014-02-20', is_major: false, name: '2014.02'}
+  model: roadmap.Milestone
+  pk: 38
+- fields: {date: '2014-03-20', is_major: false, name: '2014.03'}
+  model: roadmap.Milestone
+  pk: 39
+- fields: {date: '2014-04-20', is_major: false, name: '2014.04'}
+  model: roadmap.Milestone
+  pk: 40
+- fields: {date: '2014-05-20', is_major: false, name: '2014.05'}
+  model: roadmap.Milestone
+  pk: 41
+- fields: {date: '2014-06-20', is_major: false, name: '2014.06'}
+  model: roadmap.Milestone
+  pk: 42
+- fields: {date: '2014-07-20', is_major: false, name: '2014.07'}
+  model: roadmap.Milestone
+  pk: 43
+- fields: {date: '2014-08-20', is_major: false, name: '2014.08'}
+  model: roadmap.Milestone
+  pk: 44
+- fields: {date: '2014-09-20', is_major: false, name: '2014.09'}
+  model: roadmap.Milestone
+  pk: 45
+- fields: {date: '2014-10-20', is_major: false, name: '2014.10'}
+  model: roadmap.Milestone
+  pk: 46
+- fields: {date: '2014-11-20', is_major: false, name: '2014.11'}
+  model: roadmap.Milestone
+  pk: 47
+- fields: {date: '2014-12-20', is_major: false, name: '2014.12'}
+  model: roadmap.Milestone
+  pk: 48
+- fields: {date: '2015-01-20', is_major: false, name: '2015.01'}
+  model: roadmap.Milestone
+  pk: 49
+- fields: {date: '2015-02-20', is_major: false, name: '2015.02'}
+  model: roadmap.Milestone
+  pk: 50
+- fields: {date: '2015-03-20', is_major: false, name: '2015.03'}
+  model: roadmap.Milestone
+  pk: 51
+- fields: {date: '2015-04-20', is_major: false, name: '2015.04'}
+  model: roadmap.Milestone
+  pk: 52
+- fields: {date: '2015-05-20', is_major: false, name: '2015.05'}
+  model: roadmap.Milestone
+  pk: 53
+- fields: {date: '2015-06-20', is_major: false, name: '2015.06'}
+  model: roadmap.Milestone
+  pk: 54
+- fields: {date: '2015-07-20', is_major: false, name: '2015.07'}
+  model: roadmap.Milestone
+  pk: 55
+- fields: {date: '2015-08-20', is_major: false, name: '2015.08'}
+  model: roadmap.Milestone
+  pk: 56
+- fields: {date: '2015-09-20', is_major: false, name: '2015.09'}
+  model: roadmap.Milestone
+  pk: 57
+- fields: {date: '2015-10-20', is_major: false, name: '2015.10'}
+  model: roadmap.Milestone
+  pk: 58
+- fields: {date: '2015-11-20', is_major: false, name: '2015.11'}
+  model: roadmap.Milestone
+  pk: 59
+- fields: {date: '2015-12-20', is_major: false, name: '2015.12'}
+  model: roadmap.Milestone
+  pk: 60
+- fields: {date: '2011-05-09', is_major: true, name: Linaro Connect Europe/UDS 2011}
+  model: roadmap.Milestone
+  pk: 61
+- fields: {date: '2011-08-01', is_major: true, name: Linaro Connect Europe 2011}
+  model: roadmap.Milestone
+  pk: 62
+- fields: {date: '2011-10-31', is_major: true, name: Linaro Connect USA 2011}
+  model: roadmap.Milestone
+  pk: 63
+- fields: {date: '2012-02-06', is_major: true, name: Linaro Connect USA 2012}
+  model: roadmap.Milestone
+  pk: 64
+- fields: {date: '2012-05-28', is_major: true, name: Linaro Connect Asia 2012}
+  model: roadmap.Milestone
+  pk: 65
+- fields: {date: '2013-07-08', is_major: true, name: Linaro Connect Europe 2013}
+  model: roadmap.Milestone
+  pk: 66
+- fields: {date: '2013-03-04', is_major: true, name: Linaro Connect Asia 2013}
+  model: roadmap.Milestone
+  pk: 67
+- fields: {date: '2012-10-29', is_major: true, name: Linaro Connect Europe 2012}
+  model: roadmap.Milestone
+  pk: 68

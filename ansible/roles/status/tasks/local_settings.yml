@@ -1,0 +1,11 @@
+# Create the local_settings file and fix its ownership.
+-   name: local-settings
+    template: src=local_settings.tmpl.py dest={{ install_base }}/{{ install_dir }}/linaroroadmap/local_settings.py
+    tags:
+        - settings
+    notify: reload-apache
+
+-   name: fix-local-settings-ownership
+    file: path={{ install_base }}/{{ install_dir }}/linaroroadmap/local_settings.py owner={{ apache_user }} group={{ apache_user }}
+    tags:
+        - settings

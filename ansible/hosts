@@ -1,0 +1,15 @@
+# Info on the variables here defined:
+# role: if 'production' or 'staging'
+# install_dir: where to install the application code
+# wsgi_name: name of the wsgi script for the application
+# wsgi_daemon: name of the daemon associated with the application
+# site_function: if 'status' or 'roadmap'
+# site_name: the actual name of the website
+# 
+[staging]
+staging.status.linaro.org ansible_ssh_user=ubuntu role=staging install_dir=staging.status.linaro.org wsgi_name=staging.status.linaro.org.wsgi wsgi_daemon=staging.status.linaro.org site_function=status site_name=staging.status.linaro.org
+staging.roadmap.linaro.org ansible_ssh_user=ubuntu role=staging install_dir=staging.status.linaro.org wsgi_name=staging.status.linaro.org.wsgi wsgi_daemon=staging.roadmap.linaro.org site_function=roadmap site_name=staging.roadmap.linaro.org
+
+[production]
+status.linaro.org ansible_ssh_user=ubuntu role=production install_dir=roadmap.linaro.org wsgi_name=roadmap.linaro.org.wsgi wsgi_daemon=status.linaro.org site_function=status site_name=status.linaro.org
+roadmap.linaro.org ansible_ssh_user=ubuntu role=production install_dir=roadmap.linaro.org wsgi_name=roadmap.linaro.org.wsgi wsgi_daemon=roadmap.linaro.org site_function=roadmap site_name=roadmap.linaro.org

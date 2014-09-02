@@ -1,0 +1,3 @@
+-   include: restart-apache.yml
+-   include: stop-apache.yml
+-   include: reload-apache.yml

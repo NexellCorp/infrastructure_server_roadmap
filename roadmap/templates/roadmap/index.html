@@ -1,0 +1,247 @@
+{% extends 'roadmap/base.html' %}
+
+{% block title %}Linaro Status{% endblock %}
+
+{% block headertitle %}Linaro Status{% endblock %}
+
+{% block css_include %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ui.slider.extras.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui-1.7.1.custom.css"/>
+{% endblock %}
+
+{% block js_include %}
+{{ block.super }}
+{% load aggregate %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/highcharts.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/modules/exporting.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/ui/jquery-ui.js"></script>
+<!-- status chart -->
+<script type="text/javascript">
+
+$(function () {
+    $('#overall').highcharts({
+        chart: {
+            type: 'bar',
+            spacingLeft: 20
+        },
+        title: {
+            text: 'Cards by category <img id="categoryhelp" style="vertical-align:middle;" src="{{ STATIC_URL }}img/dialog_question.png" />',
+            useHTML: true
+        },
+        xAxis: {
+            categories: ['Status'],
+                labels: {
+                    rotation: -90,
+                    style: {
+                        color: (Highcharts.theme) || '#4d759e',
+                        fontWeight: 'bold'
+                    }
+                }
+        },
+        yAxis: {
+            title: {
+                text: 'Number of cards'
+            },
+            allowDecimals: false
+        },
+        legend: {
+                align: 'right',
+                x: -70,
+                verticalAlign: 'top',
+                y: 20,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+        },
+        plotOptions: {
+            series: {
+                animation: false,
+                events: {
+                    legendItemClick: function () {
+                        return false; 
+                    }
+                },
+                point: {
+                    events: {
+                        click: function() {
+                            location.href = this.options.url;
+                            //alert ('Category: '+ this.category +', value: '+ this.y);
+                        }
+                    }
+                }
+            }
+        },
+        series: [
+        {% for status in statuses reversed %}
+          {
+              name: '{{ status.name }}',
+              color: '{{ status.status_style.color }}',
+              data: [{
+                  y: {% card_aggregate project aggrby=status aggrbyname='status' from=from_milestone to=to_milestone %},
+                  url: '/status/{{ status.pk }}'
+              }]
+          }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+        ]
+    });
+});
+</script>
+
+<!-- burndown chart -->
+<script type="text/javascript">
+$(function () {
+        $('#burndown').highcharts({
+            chart: {
+                zoomType: 'xy'
+            },
+            colors: [
+                '#4572A7', 
+                '#277dCC', 
+                '#8AA015', 
+                '#FFFF09', 
+                '#000000', 
+                '#000000', 
+                '#92A8CD', 
+                '#A47D7C', 
+                '#B5CA92'
+            ],
+            title: {
+                text: 'Burndown <img id="burndownhelp" style="vertical-align:middle;" src="{{ STATIC_URL }}img/dialog_question.png" />',
+                useHTML: true
+            },
+            xAxis: {
+                categories: [
+                {% for snapshot in burndown_categories %}
+                    '{{ snapshot }}'{% if not forloop.last %},{% endif %}
+                {% endfor %}
+                ],
+                labels: {
+                    rotation: -45,
+                    align: 'right',
+                    step: {{ tick_interval }},
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: [{
+                min: 0,
+                title: {
+                    text: 'Total blueprints'
+                },
+                allowDecimals: false
+            },{
+                min: 0,
+                title: {
+                    text: null
+                },
+                allowDecimals: false
+            }
+            ],
+            legend: {
+                align: 'right',
+                x: -70,
+                verticalAlign: 'top',
+                y: 20,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColorSolid) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false
+            }/*,
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.x +'</b><br/>'+
+                        this.series.name +': '+ this.y +'<br/>'+
+                        'Total: '+ this.point.stackTotal;
+                }
+            }*/,
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    animation: false,
+                    events: {
+                        legendItemClick: function () {
+                            return false; 
+                        }
+                    }
+                },
+                spline: {
+                    animation: false,
+                    marker: {enabled: false},
+                    events: {
+                        legendItemClick: function () {
+                            return false; 
+                        }
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [
+                {% for serie_name, serie_value in burndown_series %}
+                    {
+                        name: '{{ serie_name }}',
+                        data: {{ serie_value }},
+                        type: 'column'
+                    },
+                {% endfor %}
+                   {
+                        name: 'burndown line',
+                        data: {{ burndown_line }},
+                        type: 'spline'
+                   }
+           ]
+        });
+    });
+
+</script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/help.js"></script>
+{% endblock %}
+
+{% block header %}
+<h2>from {{ from_milestone.name }} to {{ to_milestone.name }}</h2>
+<div id="headerhelp"><img src="{{ STATIC_URL }}img/dialog_question_bw.png"></div>
+{% endblock %}
+
+{% block main_content %}
+
+  <div id="burndown" width="100%" style="margin: 10px" title="Burndown chart">Burndown chart</div>
+
+  <div style="margin: 10px;">
+  <div class="centered">Project status <img id="twodhelp" style="vertical-align:middle;" src="{{ STATIC_URL }}img/dialog_question.png" /></div>
+  <table class="roadmaptable" width="100%">
+  <tr class="first">
+    <th>&nbsp;</th>
+    {% for status in statuses %}
+      <th> {{ status.name }}</th>
+    {% endfor %}
+    <th> total: </th>
+  </tr>
+  {% for component in components %}
+    <tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+      <td><a href="/component/{{ component.pk }}">{{ component.name }}</a></td>
+      {% for status in statuses %}
+        <td><a href="/component/{{ component.pk }}?status={{ status.pk }}">{% card_aggregate component aggrby=status aggrbyname='status' from=from_milestone to=to_milestone %}</a></td>
+      {% endfor %}
+      <td><a href="/component/{{ component.pk }}">{% card_aggregate component from=from_milestone to=to_milestone %}</a></td>
+    </tr>
+  {% endfor %}
+  <tr class="last">
+    <td>total:</td>
+    {% for status in statuses %}
+      <td><a href="/status/{{ status.pk }}">{% card_aggregate status from=from_milestone to=to_milestone %}</a></td>
+    {% endfor %}
+    <td>{% card_aggregate project from=from_milestone to=to_milestone %}</td>
+  </tr>
+  </table>
+  </div>
+
+  <div id="overall" width="100%" style="margin: 10px" title="Overall status">Overall status</div>
+
+{% include "roadmap/help.html" %}
+
+{% endblock %}
